@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista Viaggi</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-brand {
+            color: #667eea !important;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+        .nav-link {
+            color: #666 !important;
+            margin-left: 10px;
+        }
+        .nav-link:hover {
+            color: #667eea !important;
+        }
+        .container-list {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin: 30px auto;
+            max-width: 1200px;
+        }
+        .section-title {
+            color: #667eea;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .stats-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .category-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            margin-bottom: 0;
+        }
+        thead {
+            background: #f8f9fa;
+            border-bottom: 2px solid #667eea;
+        }
+        thead th {
+            color: #667eea;
+            font-weight: 600;
+            padding: 15px;
+            border: none;
+        }
+        tbody td {
+            padding: 12px 15px;
+            vertical-align: middle;
+        }
+        tbody tr {
+            border-bottom: 1px solid #e0e0e0;
+            transition: background-color 0.3s;
+        }
+        tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        .status-completo {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-incompleto {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .btn-delete {
+            background: #dc3545;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-delete:hover {
+            background: #c82333;
+        }
+        .btn-edit {
+            background: #0d6efd;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-right: 6px;
+        }
+        .btn-edit:hover {
+            background: #0b5ed7;
+        }
+        .btn-motivo {
+            background: #20c997;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-right: 6px;
+        }
+        .btn-motivo:hover {
+            background: #1aa179;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        .btn-danger-custom {
+            background: #dc3545;
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-danger-custom:hover {
+            background: #c82333;
+        }
+        @media (max-width: 768px) {
+            .container-list {
+                padding: 15px;
+            }
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            table {
+                font-size: 0.9rem;
+            }
+            thead th, tbody td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">🚗 Gestione Viaggi</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="modulo_viaggio.html">Nuovo Viaggio</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="lista_viaggi.html">Lista Viaggi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="costi.html">Costi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="statistiche.html">Statistiche</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-list">
+        <h1 class="section-title">📊 Lista Viaggi</h1>
+
+        <!-- Statistiche -->
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-number" id="stat-completi">0</div>
+                <div class="stat-label">Viaggi Completati</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="stat-incompleti">0</div>
+                <div class="stat-label">Viaggi da Completare</div>
+            </div>
+        </div>
+
+        <!-- Pulsante cancella tutto -->
+        <div style="margin-bottom: 20px; text-align: right;">
+            <button class="btn-danger-custom" onclick="cancellaTutto()">🗑️ Cancella Tutti i Viaggi</button>
+        </div>
+
+        <!-- Viaggi Completati -->
+        <div id="completi-container">
+            <div class="category-header">✅ Viaggi Completati</div>
+            <div class="table-container" id="lista-completi"></div>
+        </div>
+
+        <!-- Viaggi da Completare -->
+        <div id="incompleti-container">
+            <div class="category-header">⏳ Viaggi da Completare</div>
+            <div class="table-container" id="lista-incompleti"></div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Modal modifica viaggio -->
+    <div class="modal fade" id="modificaModal" tabindex="-1" aria-labelledby="modificaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modifica-viaggio-label">Modifica viaggio</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="modifica-km-finali" class="form-label">Km Finali</label>
+                        <input type="number" class="form-control" id="modifica-km-finali" step="0.1" placeholder="0">
+                    </div>
+                    <div class="mb-3">
+                        <label for="modifica-ora-fine" class="form-label">Ora Fine</label>
+                        <input type="time" class="form-control" id="modifica-ora-fine">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary" onclick="salvaModifica()">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal motivo viaggio -->
+    <div class="modal fade" id="motivoModal" tabindex="-1" aria-labelledby="motivoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="motivoModalLabel">Motivo del viaggio</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <div class="modal-body" id="motivoModalBody">
+                    <p>Nessun motivo specificato.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8080/api/viaggi';
+
+        // Carica e visualizza i viaggi
+        async function caricaViaggi() {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error('Errore nel caricamento');
+                
+                const viaggi = await response.json();
+                viaggi.sort(sortByDataOra);
+                const listaCompleti = document.getElementById('lista-completi');
+                const listaIncompleti = document.getElementById('lista-incompleti');
+                
+                listaCompleti.innerHTML = '';
+                listaIncompleti.innerHTML = '';
+
+                let countCompleti = 0;
+                let countIncompleti = 0;
+
+                if (viaggi.length === 0) {
+                    listaCompleti.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>Nessun viaggio completato</p></div>';
+                    listaIncompleti.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>Nessun viaggio da completare</p></div>';
+                    document.getElementById('stat-completi').textContent = '0';
+                    document.getElementById('stat-incompleti').textContent = '0';
+                    return;
+                }
+
+                // Separa viaggi completi e incompleti
+                const completati = viaggi.filter(v => v.oraFine && v.kmFinali);
+                const incompleti = viaggi.filter(v => !v.oraFine || !v.kmFinali);
+
+                if (completati.length > 0) {
+                    listaCompleti.innerHTML = creaTabella(completati, true);
+                    countCompleti = completati.length;
+                } else {
+                    listaCompleti.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>Nessun viaggio completato</p></div>';
+                }
+
+                if (incompleti.length > 0) {
+                    listaIncompleti.innerHTML = creaTabella(incompleti, false);
+                    countIncompleti = incompleti.length;
+                } else {
+                    listaIncompleti.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>Nessun viaggio da completare</p></div>';
+                }
+
+                document.getElementById('stat-completi').textContent = countCompleti;
+                document.getElementById('stat-incompleti').textContent = countIncompleti;
+
+            } catch (error) {
+                console.error('Errore:', error);
+                document.getElementById('lista-completi').innerHTML = '<div class="empty-state"><p>⚠️ Errore nel caricamento dei dati</p></div>';
+                document.getElementById('lista-incompleti').innerHTML = '<div class="empty-state"><p>⚠️ Errore nel caricamento dei dati</p></div>';
+            }
+        }
+
+        // Crea la tabella HTML
+        function creaTabella(viaggi, isCompleto) {
+            const statusClass = isCompleto ? 'status-completo' : 'status-incompleto';
+            const statusText = isCompleto ? '✓' : '⏳';
+
+            let html = `
+                <table class="table">
+                    <thead>
+                                <tr>
+                            <th>Data</th>
+                            <th>Ora Partenza</th>
+                            <th>Ora Fine</th>
+                            <th>Da</th>
+                            <th>A</th>
+                            <th>Km Iniziali</th>
+                            <th>Km Finali</th>
+                            <th>Km Totali</th>
+                            <th>Percorso</th>
+                            <th>Stato</th>
+                            <th>Azione</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            viaggi.forEach(viaggio => {
+                const kmTotali = viaggio.kmFinali ? (parseFloat(viaggio.kmFinali) - parseFloat(viaggio.kmIniziali)).toFixed(1) : '—';
+                const tipoPercorso = viaggio.tipoPercorso === 'urbano' ? 'Urbano' : 'Extraurbano';
+                const actionButtons = isCompleto
+                    ? `<button class="btn-motivo" onclick="mostraMotivo(${viaggio.id})">Motivo</button><button class="btn-delete" onclick="eliminaViaggio(${viaggio.id})">Elimina</button>`
+                    : `<button class="btn-motivo" onclick="mostraMotivo(${viaggio.id})">Motivo</button><button class="btn-edit" onclick="apriModifica(${viaggio.id})">Modifica</button><button class="btn-delete" onclick="eliminaViaggio(${viaggio.id})">Elimina</button>`;
+
+                html += `
+                    <tr>
+                        <td>${formatData(viaggio.data)}</td>
+                        <td>${viaggio.oraPartenza}</td>
+                        <td>${viaggio.oraFine || '—'}</td>
+                        <td>${viaggio.da}</td>
+                        <td>${viaggio.a}</td>
+                        <td>${viaggio.kmIniziali}</td>
+                        <td>${viaggio.kmFinali || '—'}</td>
+                        <td><strong>${kmTotali}</strong></td>
+                        <td>${tipoPercorso}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>${actionButtons}</td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+            `;
+
+            return html;
+        }
+
+        // Formatta la data
+        function formatData(data) {
+            const dataObj = new Date(data);
+            return dataObj.toLocaleDateString('it-IT', { 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit' 
+            });
+        }
+
+        function sortByDataOra(a, b) {
+            const dateA = new Date(`${a.data}T${a.oraPartenza || '00:00'}`);
+            const dateB = new Date(`${b.data}T${b.oraPartenza || '00:00'}`);
+            return dateA - dateB;
+        }
+
+        // Mostra il motivo del viaggio
+        async function mostraMotivo(id) {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error('Errore nel caricamento dei viaggi');
+                const viaggi = await response.json();
+                const viaggio = viaggi.find(v => v.id === id);
+                if (!viaggio) return alert('Viaggio non trovato');
+
+                const motivo = viaggio.motivoViaggio && viaggio.motivoViaggio.trim() ? viaggio.motivoViaggio : 'Nessun motivo specificato.';
+                document.getElementById('motivoModalBody').innerHTML = `<p>${motivo}</p>`;
+                const modal = new bootstrap.Modal(document.getElementById('motivoModal'));
+                modal.show();
+            } catch (error) {
+                console.error('Errore:', error);
+                alert('Errore durante il recupero del motivo del viaggio');
+            }
+        }
+
+        async function eliminaViaggio(id) {
+            if (confirm('Sei sicuro di voler eliminare questo viaggio?')) {
+                try {
+                    const response = await fetch(`${API_URL}/${id}`, {
+                        method: 'DELETE'
+                    });
+                    if (response.ok) {
+                        caricaViaggi();
+                    } else {
+                        alert('Errore nell\'eliminazione del viaggio');
+                    }
+                } catch (error) {
+                    console.error('Errore:', error);
+                    alert('Errore nell\'eliminazione del viaggio');
+                }
+            }
+        }
+
+        // Cancella tutti i viaggi
+        async function cancellaTutto() {
+            if (confirm('Sei sicuro di voler eliminare TUTTI i viaggi? Questa azione non può essere annullata!')) {
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'DELETE'
+                    });
+                    if (response.ok) {
+                        caricaViaggi();
+                        alert('Tutti i viaggi sono stati eliminati');
+                    } else {
+                        alert('Errore nell\'eliminazione dei viaggi');
+                    }
+                } catch (error) {
+                    console.error('Errore:', error);
+                    alert('Errore nell\'eliminazione dei viaggi');
+                }
+            }
+        }
+
+        let currentEditId = null;
+
+        async function apriModifica(id) {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error('Errore nel caricamento dei viaggi');
+                const viaggi = await response.json();
+                const viaggio = viaggi.find(v => v.id === id);
+                if (!viaggio) return alert('Viaggio non trovato');
+
+                currentEditId = id;
+                document.getElementById('modifica-km-finali').value = viaggio.kmFinali || '';
+                document.getElementById('modifica-ora-fine').value = viaggio.oraFine || '';
+                document.getElementById('modifica-viaggio-label').textContent = `Modifica viaggio del ${formatData(viaggio.data)}`;
+
+                const modal = new bootstrap.Modal(document.getElementById('modificaModal'));
+                modal.show();
+            } catch (error) {
+                console.error('Errore:', error);
+                alert('Errore durante la modifica del viaggio');
+            }
+        }
+
+        async function salvaModifica() {
+            try {
+                const kmFinali = parseFloat(document.getElementById('modifica-km-finali').value);
+                const oraFine = document.getElementById('modifica-ora-fine').value.trim();
+
+                if (isNaN(kmFinali)) {
+                    return alert('Inserisci un valore numerico valido per i Km.');
+                }
+                if (!oraFine) {
+                    return alert('Inserisci un orario di fine valido.');
+                }
+
+                const response = await fetch(`${API_URL}/${currentEditId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ kmFinali, oraFine })
+                });
+
+                if (!response.ok) throw new Error('Errore nella modifica del viaggio');
+                caricaViaggi();
+                const modalEl = document.getElementById('modificaModal');
+                const modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
+            } catch (error) {
+                console.error('Errore:', error);
+                alert('Errore durante il salvataggio della modifica');
+            }
+        }
+
+        // Carica i viaggi al caricamento della pagina
+        window.addEventListener('load', caricaViaggi);
+        // Aggiorna la lista ogni 2 secondi
+        setInterval(caricaViaggi, 2000);
+    </script>
+</body>
+</html>

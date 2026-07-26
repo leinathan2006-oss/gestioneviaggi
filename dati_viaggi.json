@@ -1,0 +1,442 @@
+﻿[
+  {
+    "id": 1,
+    "data": "2026-07-26",
+    "oraPartenza": "19:53",
+    "oraFine": "20:13",
+    "kmIniziali": 81000,
+    "kmFinali": 81010,
+    "kmTotali": "10.0",
+    "da": "via san vincenzo de paoli 45 nichelino",
+    "a": "via danilo dolci 6 beinasco",
+    "tipoPercorso": "urbano",
+    "tipoPercorsoLabel": "Percorso Urbano",
+    "passeggeri": [
+      "Daniele",
+      "Anita"
+    ],
+    "motivoViaggio": "andare a prendere simone"
+  },
+  {
+    "id": 2,
+    "data": "2026-07-27",
+    "oraPartenza": "21:57",
+    "oraFine": "22:27",
+    "kmIniziali": 81010,
+    "kmFinali": 81142,
+    "kmTotali": "132.0",
+    "da": "nichelino",
+    "a": "milano",
+    "tipoPercorso": "extraurbano",
+    "tipoPercorsoLabel": "Percorso Extraurbano",
+    "passeggeri": [
+      "Daniele",
+      "Anita",
+      "Nicole"
+    ],
+    "motivoViaggio": "viaggio"
+  },
+  {
+    "id": 3,
+    "data": "2026-07-10",
+    "oraPartenza": "08:15",
+    "oraFine": "09:05",
+    "kmIniziali": 80900,
+    "kmFinali": 80945,
+    "kmTotali": "45.0",
+    "da": "via torino 12 torino",
+    "a": "via nazionale 5 moncalieri",
+    "tipoPercorso": "extraurbano",
+    "tipoPercorsoLabel": "Percorso Extraurbano",
+    "passeggeri": [
+      "Daniele"
+    ],
+    "motivoViaggio": "consegna pacchi"
+  },
+  {
+    "id": 4,
+    "data": "2026-06-15",
+    "oraPartenza": "10:20",
+    "oraFine": "10:50",
+    "kmIniziali": 80500,
+    "kmFinali": 80530,
+    "kmTotali": "30.0",
+    "da": "via roma 1",
+    "a": "piazza vittorio 8",
+    "tipoPercorso": "urbano",
+    "tipoPercorsoLabel": "Percorso Urbano",
+    "passeggeri": [
+      "Anita"
+    ],
+    "motivoViaggio": "commissioni"
+  },
+  {
+    "id": 5,
+    "data": "2026-06-25",
+    "oraPartenza": "14:00",
+    "oraFine": "14:35",
+    "kmIniziali": 80530,
+    "kmFinali": 80560,
+    "kmTotali": "30.0",
+    "da": "via alfieri 25",
+    "a": "via chieri 42",
+    "tipoPercorso": "urbano",
+    "tipoPercorsoLabel": "Percorso Urbano",
+    "passeggeri": [
+      "Nicole"
+    ],
+    "motivoViaggio": "spedizione"
+  },
+  {
+    "id": 6,
+    "data": "2026-05-05",
+    "oraPartenza": "07:30",
+    "oraFine": "09:10",
+    "kmIniziali": 80000,
+    "kmFinali": 80120,
+    "kmTotali": "120.0",
+    "da": "via genova 10",
+    "a": "via torino 99",
+    "tipoPercorso": "extraurbano",
+    "tipoPercorsoLabel": "Percorso Extraurbano",
+    "passeggeri": [
+      "Daniele",
+      "Nicole"
+    ],
+    "motivoViaggio": "trasferta cliente"
+  },
+  {
+    "id": 7,
+    "data": "2026-07-01",
+    "oraPartenza": "12:00",
+    "oraFine": "12:25",
+    "kmIniziali": 81050,
+    "kmFinali": 81070,
+    "kmTotali": "20.0",
+    "da": "via roma 22",
+    "a": "via torino 7",
+    "tipoPercorso": "urbano",
+    "tipoPercorsoLabel": "Percorso Urbano",
+    "passeggeri": [
+      "Anita"
+    ],
+    "motivoViaggio": "ritiro documenti"
+  },
+  {
+    "id": 8,
+    "data": "2026-05-10",
+    "oraPartenza": "09:15",
+    "oraFine": "10:45",
+    "kmIniziali": 79850,
+    "kmFinali": 79950,
+    "kmTotali": "100.0",
+    "da": "nichelino",
+    "a": "asti",
+    "tipoPercorso": "extraurbano",
+    "tipoPercorsoLabel": "Percorso Extraurbano",
+    "passeggeri": [
+      "Anita",
+      "Nicole"
+    ],
+    "motivoViaggio": "meeting aziendale"
+  },
+  {
+    "id": 9,
+    "data": "2026-05-20",
+    "oraPartenza": "14:30",
+    "oraFine": "15:10",
+    "kmIniziali": 79960,
+    "kmFinali": 80020,
+    "kmTotali": "60.0",
+    "da": "via costituzione 5 torino",
+    "a": "stazione centrale alba",
+    "tipoPercorso": "urbano",
+    "tipoPercorsoLabel": "Percorso Urbano",
+    "passeggeri": [
+      "Nicole"
+    ],
+    "motivoViaggio": "visita cliente"
+  },
+  {
+    "id": 10,
+    "data": "2026-06-05",
+    "oraPartenza": "08:00",
+    "oraFine": "09:30",
+    "kmIniziali": 80120,
+    "kmFinali": 80210,
+    "kmTotali": "90.0",
+    "da": "via torino 99",
+    "a": "via garibaldi 45 alessandria",
+    "tipoPercorso": "extraurbano",
+    "tipoPercorsoLabel": "Percorso Extraurbano",
+    "passeggeri": [
+      "Daniele",
+      "Anita"
+    ],
+    "motivoViaggio": "consegna materiali"
+  },
+  {
+    "id": 11,
+    "data": "2026-06-10",
+    "oraPartenza": "16:20",
+    "oraFine": "16:50",
+    "kmIniziali": 80210,
+    "kmFinali": 80250,
+    "kmTotali": "40.0",
+    "da": "piazza castello torino",
+    "a": "corso francia nichelino",
+    "tipoPercorso": "urbano",
+    "tipoPercorsoLabel": "Percorso Urbano",
+    "passeggeri": [
+      "Anita"
+    ],
+    "motivoViaggio": "riunione commerciale"
+  },
+  {
+    "id": 12,
+    "data": "2026-06-18",
+    "oraPartenza": "10:45",
+    "oraFine": "12:15",
+    "kmIniziali": 80250,
+    "kmFinali": 80380,
+    "kmTotali": "130.0",
+    "da": "nichelino",
+    "a": "cuneo",
+    "tipoPercorso": "extraurbano",
+    "tipoPercorsoLabel": "Percorso Extraurbano",
+    "passeggeri": [
+      "Daniele",
+      "Nicole"
+    ],
+    "motivoViaggio": "visita fornitore"
+  },
+  {
+    "id": 13,
+    "data": "2026-07-03",
+    "oraPartenza": "13:00",
+    "oraFine": "13:40",
+    "kmIniziali": 81070,
+    "kmFinali": 81120,
+    "kmTotali": "50.0",
+    "da": "via po 8 torino",
+    "a": "via nazionale beinasco",
+    "tipoPercorso": "urbano",
+    "tipoPercorsoLabel": "Percorso Urbano",
+    "passeggeri": [
+      "Daniele"
+    ],
+    "motivoViaggio": "sopralluogo cantiere"
+  },
+  {
+    "id": 14,
+    "data": "2026-07-05",
+    "oraPartenza": "07:30",
+    "oraFine": "08:50",
+    "kmIniziali": 81120,
+    "kmFinali": 81180,
+    "kmTotali": "60.0",
+    "da": "nichelino",
+    "a": "avigliana",
+    "tipoPercorso": "urbano",
+    "tipoPercorsoLabel": "Percorso Urbano",
+    "passeggeri": [
+      "Nicole"
+    ],
+    "motivoViaggio": "appuntamento personale"
+  },
+  {
+    "id": 15,
+    "data": "2026-07-08",
+    "oraPartenza": "11:20",
+    "oraFine": "12:40",
+    "kmIniziali": 81180,
+    "kmFinali": 81260,
+    "kmTotali": "80.0",
+    "da": "corso massimo d'azeglio torino",
+    "a": "via marconi moncalieri",
+    "tipoPercorso": "urbano",
+    "tipoPercorsoLabel": "Percorso Urbano",
+    "passeggeri": [
+      "Anita",
+      "Nicole"
+    ],
+    "motivoViaggio": "festa amici"
+  },
+  {
+    "id": 16,
+    "data": "2026-07-12",
+    "oraPartenza": "15:00",
+    "oraFine": "16:30",
+    "kmIniziali": 81260,
+    "kmFinali": 81360,
+    "kmTotali": "100.0",
+    "da": "nichelino",
+    "a": "ivrea",
+    "tipoPercorso": "extraurbano",
+    "tipoPercorsoLabel": "Percorso Extraurbano",
+    "passeggeri": [
+      "Daniele",
+      "Anita",
+      "Nicole"
+    ],
+    "motivoViaggio": "gita weekend"
+  },
+  {
+    "id": 17,
+    "data": "2026-07-15",
+    "oraPartenza": "09:00",
+    "oraFine": "09:45",
+    "kmIniziali": 81360,
+    "kmFinali": 81410,
+    "kmTotali": "50.0",
+    "da": "via san carlo 156 torino",
+    "a": "uffici via lagrange torino",
+    "tipoPercorso": "urbano",
+    "tipoPercorsoLabel": "Percorso Urbano",
+    "passeggeri": [
+      "Nicole"
+    ],
+    "motivoViaggio": "riunione lavoro"
+  },
+  {
+    "id": 18,
+    "data": "2026-07-18",
+    "oraPartenza": "18:30",
+    "oraFine": "20:00",
+    "kmIniziali": 81410,
+    "kmFinali": 81530,
+    "kmTotali": "120.0",
+    "da": "nichelino",
+    "a": "vercelli",
+    "tipoPercorso": "extraurbano",
+    "tipoPercorsoLabel": "Percorso Extraurbano",
+    "passeggeri": [
+      "Daniele",
+      "Anita"
+    ],
+    "motivoViaggio": "cena importante"
+  },
+  {
+    "id": 19,
+    "data": "2026-07-20",
+    "oraPartenza": "12:15",
+    "oraFine": "13:00",
+    "kmIniziali": 81530,
+    "kmFinali": 81580,
+    "kmTotali": "50.0",
+    "da": "stazione porta nuova torino",
+    "a": "ospedale san giovanni molinette",
+    "tipoPercorso": "urbano",
+    "tipoPercorsoLabel": "Percorso Urbano",
+    "passeggeri": [
+      "Anita"
+    ],
+    "motivoViaggio": "visita ospedaliera"
+  },
+  {
+    "id": 20,
+    "data": "2026-07-22",
+    "oraPartenza": "10:30",
+    "oraFine": "12:00",
+    "kmIniziali": 81580,
+    "kmFinali": 81700,
+    "kmTotali": "120.0",
+    "da": "nichelino",
+    "a": "alessandria centro",
+    "tipoPercorso": "extraurbano",
+    "tipoPercorsoLabel": "Percorso Extraurbano",
+    "passeggeri": [
+      "Nicole"
+    ],
+    "motivoViaggio": "shopping"
+  },
+  {
+    "id": 21,
+    "data": "2026-07-24",
+    "oraPartenza": "14:45",
+    "oraFine": "15:30",
+    "kmIniziali": 81700,
+    "kmFinali": 81750,
+    "kmTotali": "50.0",
+    "da": "via nizza 230 torino",
+    "a": "corso umbria nichelino",
+    "tipoPercorso": "urbano",
+    "tipoPercorsoLabel": "Percorso Urbano",
+    "passeggeri": [
+      "Daniele",
+      "Anita"
+    ],
+    "motivoViaggio": "commissioni varie"
+  },
+  {
+    "id": 22,
+    "data": "2026-06-03",
+    "oraPartenza": "08:30",
+    "oraFine": "09:15",
+    "kmIniziali": 80020,
+    "kmFinali": 80080,
+    "kmTotali": "60.0",
+    "da": "via tassoni torino",
+    "a": "pista ciclabile po moncalieri",
+    "tipoPercorso": "urbano",
+    "tipoPercorsoLabel": "Percorso Urbano",
+    "passeggeri": [
+      "Nicole"
+    ],
+    "motivoViaggio": "corsa mattutina"
+  },
+  {
+    "id": 23,
+    "data": "2026-06-08",
+    "oraPartenza": "16:00",
+    "oraFine": "17:30",
+    "kmIniziali": 80080,
+    "kmFinali": 80180,
+    "kmTotali": "100.0",
+    "da": "nichelino",
+    "a": "settimo torinese",
+    "tipoPercorso": "urbano",
+    "tipoPercorsoLabel": "Percorso Urbano",
+    "passeggeri": [
+      "Daniele"
+    ],
+    "motivoViaggio": "ispezione cantiere"
+  },
+  {
+    "id": 24,
+    "data": "2026-07-14",
+    "oraPartenza": "09:30",
+    "oraFine": "10:20",
+    "kmIniziali": 81360,
+    "kmFinali": 81410,
+    "kmTotali": "50.0",
+    "da": "piazza castello torino",
+    "a": "basilica superga torino",
+    "tipoPercorso": "urbano",
+    "tipoPercorsoLabel": "Percorso Urbano",
+    "passeggeri": [
+      "Anita",
+      "Nicole"
+    ],
+    "motivoViaggio": "turismo locale"
+  },
+  {
+    "id": 25,
+    "data": "2026-05-28",
+    "oraPartenza": "11:00",
+    "oraFine": "12:45",
+    "kmIniziali": 80000,
+    "kmFinali": 80110,
+    "kmTotali": "110.0",
+    "da": "nichelino",
+    "a": "piacenza centro",
+    "tipoPercorso": "extraurbano",
+    "tipoPercorsoLabel": "Percorso Extraurbano",
+    "passeggeri": [
+      "Daniele",
+      "Anita",
+      "Nicole"
+    ],
+    "motivoViaggio": "riunione strategica"
+  }
+]

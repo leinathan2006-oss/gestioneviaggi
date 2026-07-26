@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modulo Registro Viaggi</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+        .container-form {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .form-title {
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2rem;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .form-control, .form-select {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .km-totali-display {
+            background: #f0f4ff;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .row-two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            width: 100%;
+            margin-top: 20px;
+            transition: transform 0.3s;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        .btn-reset {
+            background: #6c757d;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 8px;
+            width: 100%;
+            margin-top: 10px;
+            color: white;
+            transition: background 0.3s;
+        }
+        .btn-reset:hover {
+            background: #5a6268;
+        }
+        .form-section-title {
+            background: #f8f9fa;
+            padding: 12px 15px;
+            border-radius: 8px;
+            color: #667eea;
+            font-weight: bold;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+        @media (max-width: 576px) {
+            .container-form {
+                padding: 25px;
+            }
+            .form-title {
+                font-size: 1.6rem;
+            }
+            .row-two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light" style="background: rgba(255, 255, 255, 0.95); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#" style="color: #667eea; font-weight: bold; font-size: 1.3rem;">🚗 Gestione Viaggi</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="modulo_viaggio.html" style="color: #667eea !important; margin-left: 10px;">➕ Nuovo Viaggio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="lista_viaggi.html" style="color: #666 !important; margin-left: 10px;">📋 Lista Viaggi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="costi.html" style="color: #666 !important; margin-left: 10px;">💰 Costi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="statistiche.html" style="color: #666 !important; margin-left: 10px;">📈 Statistiche</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-form">
+        <h1 class="form-title">📋 Registro Viaggi</h1>
+        
+        <form id="modulo-viaggio">
+            <!-- Sezione Data e Orari -->
+            <div class="form-section-title">📅 Data e Orari</div>
+            
+            <div class="form-group">
+                <label for="data">Data</label>
+                <input type="date" class="form-control" id="data" required>
+            </div>
+
+            <div class="row-two-col">
+                <div class="form-group">
+                    <label for="ora-partenza">Ora Partenza</label>
+                    <input type="time" class="form-control" id="ora-partenza" placeholder="HH:mm" required>
+                </div>
+                <div class="form-group">
+                    <label for="ora-fine">Ora Fine</label>
+                    <input type="time" class="form-control" id="ora-fine" placeholder="HH:mm">
+                </div>
+            </div>
+
+            <!-- Sezione Chilometri -->
+            <div class="form-section-title">🛣️ Chilometri</div>
+
+            <div class="row-two-col">
+                <div class="form-group">
+                    <label for="km-iniziali">Km Iniziali</label>
+                    <input type="number" class="form-control" id="km-iniziali" placeholder="0" step="0.1" required>
+                </div>
+                <div class="form-group">
+                    <label for="km-finali">Km Finali</label>
+                    <input type="number" class="form-control" id="km-finali" placeholder="0" step="0.1">
+                    <div class="form-text">Inserisci il km finale oppure il km totale.</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="km-totali-input">Km Totali</label>
+                <input type="number" class="form-control" id="km-totali-input" placeholder="0" step="0.1">
+                <div class="form-text">Se inserisci i km totali, il sistema calcola i km finali automaticamente.</div>
+            </div>
+
+            <div class="form-group">
+                <label>Km Totali calcolati</label>
+                <div class="km-totali-display" id="km-totali">0 km</div>
+            </div>
+
+            <!-- Sezione Percorso -->
+            <div class="form-section-title">📍 Percorso</div>
+
+            <div class="form-group">
+                <label for="da-indirizzo">Da (Indirizzo di Partenza)</label>
+                <input type="text" class="form-control" id="da-indirizzo" placeholder="Es. Via Roma, 123" required>
+            </div>
+
+            <div class="form-group">
+                <label for="a-indirizzo">A (Indirizzo di Arrivo)</label>
+                <input type="text" class="form-control" id="a-indirizzo" placeholder="Es. Via Milano, 456" required>
+            </div>
+
+            <div class="form-group">
+                <label for="tipo-percorso">Tipo di Percorso</label>
+                <select class="form-select" id="tipo-percorso" required>
+                    <option value="">-- Seleziona un'opzione --</option>
+                    <option value="urbano">Percorso Urbano</option>
+                    <option value="extraurbano">Percorso Extraurbano</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Passeggeri</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="passeggero" id="passeggero-daniele" value="Daniele">
+                    <label class="form-check-label" for="passeggero-daniele">Daniele</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="passeggero" id="passeggero-anita" value="Anita">
+                    <label class="form-check-label" for="passeggero-anita">Anita</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="passeggero" id="passeggero-nicole" value="Nicole">
+                    <label class="form-check-label" for="passeggero-nicole">Nicole</label>
+                </div>
+                <div class="form-text">Scegli i passeggeri presenti. Funziona anche su mobile.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="motivo-viaggio">Motivo Viaggio</label>
+                <textarea class="form-control" id="motivo-viaggio" rows="3" placeholder="Es. Riunione in ufficio, visita cliente, consegna materiale"></textarea>
+            </div>
+
+            <!-- Pulsanti -->
+            <button type="submit" class="btn btn-primary btn-submit">✓ Salva Viaggio</button>
+            <button type="reset" class="btn btn-reset">↻ Cancella</button>
+            <a href="costi.html" class="btn btn-outline-secondary mt-3" style="width:100%;">Vai a Costi</a>
+        </form>
+
+        <!-- Tabella risultati -->
+        <div id="risultati-section" style="display: none; margin-top: 40px;">
+            <div class="form-section-title">✅ Riepilogo Viaggio</div>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; font-size: 0.95rem;">
+                <p><strong>Data:</strong> <span id="ris-data"></span></p>
+                <p><strong>Orario:</strong> <span id="ris-orario"></span></p>
+                <p><strong>Percorso:</strong> <span id="ris-percorso"></span></p>
+                <p><strong>Km Totali:</strong> <span id="ris-km" style="color: #667eea; font-weight: bold;"></span></p>
+                <p><strong>Tipo Strada:</strong> <span id="ris-tipo"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        const kmIniziali = document.getElementById('km-iniziali');
+        const kmFinali = document.getElementById('km-finali');
+        const kmTotaliInput = document.getElementById('km-totali-input');
+        const kmTotaliDisplay = document.getElementById('km-totali');
+        const form = document.getElementById('modulo-viaggio');
+        const risultatiSection = document.getElementById('risultati-section');
+        const API_URL = 'http://localhost:8080/api/viaggi';
+
+        function sortByDataOra(a, b) {
+            const dateA = new Date(`${a.data}T${a.oraPartenza || '00:00'}`);
+            const dateB = new Date(`${b.data}T${b.oraPartenza || '00:00'}`);
+            return dateA - dateB;
+        }
+
+        async function impostaKmInizialiUltimoViaggio() {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) return;
+                const viaggi = await response.json();
+                viaggi.sort(sortByDataOra);
+                const ultimoCompleto = [...viaggi].reverse().find(v => v.kmFinali !== null && v.kmFinali !== undefined);
+                if (ultimoCompleto && !isNaN(parseFloat(ultimoCompleto.kmFinali))) {
+                    kmIniziali.value = parseFloat(ultimoCompleto.kmFinali).toFixed(1);
+                    aggiornaKm();
+                }
+            } catch (error) {
+                console.warn('Impossibile recuperare ultimo viaggio:', error);
+            }
+        }
+
+        // Funzione per calcolare km totali
+        function aggiornaKm() {
+            const inizio = parseFloat(kmIniziali.value) || 0;
+            const finale = kmFinali.value ? parseFloat(kmFinali.value) : null;
+            const totali = kmTotaliInput.value ? parseFloat(kmTotaliInput.value) : null;
+
+            if (totali !== null && !isNaN(totali)) {
+                const calcolatoFinale = inizio + totali;
+                kmFinali.value = calcolatoFinale.toFixed(1);
+                kmTotaliDisplay.textContent = totali.toFixed(1) + ' km';
+            } else if (finale !== null && !isNaN(finale)) {
+                const totale = finale - inizio;
+                if (totale < 0) {
+                    kmTotaliDisplay.textContent = 'Errore: km finali < km iniziali';
+                } else {
+                    kmTotaliDisplay.textContent = totale.toFixed(1) + ' km';
+                }
+            } else {
+                kmTotaliDisplay.textContent = '0 km';
+            }
+        }
+
+        // Calcola km totali quando cambiano gli input
+        kmIniziali.addEventListener('input', () => {
+            if (kmTotaliInput.value) {
+                aggiornaKm();
+            } else {
+                aggiornaKm();
+            }
+        });
+        kmFinali.addEventListener('input', () => {
+            if (kmTotaliInput.value) {
+                kmTotaliInput.value = '';
+            }
+            aggiornaKm();
+        });
+        kmTotaliInput.addEventListener('input', () => {
+            if (kmTotaliInput.value) {
+                aggiornaKm();
+            } else {
+                aggiornaKm();
+            }
+        });
+
+        // Gestisci l'invio del modulo
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Raccogli i dati
+            const data = document.getElementById('data').value;
+            const oraPartenza = document.getElementById('ora-partenza').value;
+            const oraFine = document.getElementById('ora-fine').value;
+            const kmIni = parseFloat(kmIniziali.value) || 0;
+            const kmFin = kmFinali.value ? parseFloat(kmFinali.value) : null;
+            if (kmFin !== null && kmFin < kmIni) {
+                alert('I km finali devono essere maggiori o uguali ai km iniziali. Reinseriscili.');
+                kmFinali.focus();
+                return;
+            }
+            const da = document.getElementById('da-indirizzo').value;
+            const a = document.getElementById('a-indirizzo').value;
+            const tipo = document.getElementById('tipo-percorso').value;
+            const tipoLabel = document.getElementById('tipo-percorso').options[document.getElementById('tipo-percorso').selectedIndex].text;
+            const passeggeri = Array.from(document.querySelectorAll('input[name="passeggero"]:checked')).map(input => input.value);
+            const motivoViaggio = document.getElementById('motivo-viaggio').value.trim();
+            const kmTotaliInputValue = kmTotaliInput.value ? parseFloat(kmTotaliInput.value) : null;
+            let kmFinaliVal = kmFin;
+            let kmTotaliVal = null;
+
+            if (kmTotaliInputValue !== null) {
+                kmTotaliVal = kmTotaliInputValue;
+                kmFinaliVal = parseFloat(kmIni) + kmTotaliInputValue;
+            } else if (kmFin !== null) {
+                kmTotaliVal = parseFloat((kmFin - kmIni).toFixed(1));
+            }
+
+            if (kmFinaliVal !== null && kmFinaliVal < kmIni) {
+                alert('I km finali devono essere maggiori o uguali ai km iniziali. Reinseriscili.');
+                kmFinali.focus();
+                return;
+            }
+            if (kmTotaliInputValue !== null && kmFin !== null) {
+                const totaleCalcolato = (kmFin - kmIni).toFixed(1);
+                if (Math.abs(totaleCalcolato - kmTotaliInputValue) > 0.05) {
+                    alert('I km finali e i km totali non sono coerenti tra loro. Controlla i valori.');
+                    return;
+                }
+            }
+
+            const kmTotali = kmTotaliVal !== null ? kmTotaliVal.toFixed(1) : null;
+            const kmFinali = kmFinaliVal !== null ? kmFinaliVal.toFixed(1) : null;
+
+            // Crea oggetto viaggio
+            const viaggio = {
+                data: data,
+                oraPartenza: oraPartenza,
+                oraFine: oraFine || null,
+                kmIniziali: kmIni,
+                kmFinali: kmFinali,
+                kmTotali: kmTotali,
+                da: da,
+                a: a,
+                tipoPercorso: tipo,
+                tipoPercorsoLabel: tipoLabel,
+                passeggeri: passeggeri,
+                motivoViaggio: motivoViaggio
+            };
+
+            try {
+                // Salva i dati tramite API
+                const response = await fetch('http://localhost:8080/api/viaggi', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(viaggio)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Errore nel salvataggio');
+                }
+
+                // Converti data per visualizzazione
+                const dataObj = new Date(data);
+                const dataFormattata = dataObj.toLocaleDateString('it-IT', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+
+                // Mostra il riepilogo
+                document.getElementById('ris-data').textContent = dataFormattata;
+                document.getElementById('ris-orario').textContent = oraPartenza + (oraFine ? ' - ' + oraFine : ' (da completare)');
+                document.getElementById('ris-percorso').textContent = da + ' → ' + a;
+                document.getElementById('ris-km').textContent = kmTotali ? kmTotali + ' km' : '0 km';
+                document.getElementById('ris-tipo').textContent = tipoLabel;
+                
+                risultatiSection.style.display = 'block';
+
+                // Scroll al riepilogo
+                setTimeout(() => {
+                    risultatiSection.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+
+                console.log('Viaggio salvato:', viaggio);
+
+                // Reset form dopo 2 secondi
+                setTimeout(() => {
+                    form.reset();
+                    risultatiSection.style.display = 'none';
+                    const oggi = new Date().toISOString().split('T')[0];
+                    document.getElementById('data').value = oggi;
+                    aggiornaKm();
+                }, 2000);
+            } catch (error) {
+                console.error('Errore:', error);
+                alert('Errore nel salvataggio del viaggio. Assicurati che il server sia in esecuzione su http://localhost:8080');
+            }
+        });
+
+        // Imposta la data odierna come default
+        const oggi = new Date().toISOString().split('T')[0];
+        document.getElementById('data').value = oggi;
+
+        window.addEventListener('load', async () => {
+            await impostaKmInizialiUltimoViaggio();
+        });
+
+        form.addEventListener('reset', () => {
+            setTimeout(async () => {
+                document.getElementById('data').value = oggi;
+                kmTotaliInput.value = '';
+                await impostaKmInizialiUltimoViaggio();
+                aggiornaKm();
+            }, 0);
+        });
+    </script>
+</body>
+</html>

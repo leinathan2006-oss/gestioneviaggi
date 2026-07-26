@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Costi Viaggi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-brand {
+            color: #667eea !important;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+        .nav-link {
+            color: #666 !important;
+            margin-left: 10px;
+        }
+        .nav-link:hover {
+            color: #667eea !important;
+        }
+        .container-cost {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin: 30px auto;
+            max-width: 1200px;
+        }
+        .section-title {
+            color: #667eea;
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            margin-bottom: 0;
+        }
+        thead {
+            background: #f8f9fa;
+            border-bottom: 2px solid #667eea;
+        }
+        thead th {
+            color: #667eea;
+            font-weight: 600;
+            padding: 15px;
+            border: none;
+        }
+        tbody td {
+            padding: 12px 15px;
+            vertical-align: middle;
+        }
+        tbody tr {
+            border-bottom: 1px solid #e0e0e0;
+            transition: background-color 0.3s;
+        }
+        tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        .btn-secondary-custom {
+            background: #6c757d;
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-secondary-custom:hover {
+            background: #5a6268;
+        }
+        @media (max-width: 768px) {
+            .container-cost {
+                padding: 15px;
+            }
+            table {
+                font-size: 0.9rem;
+            }
+            thead th, tbody td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">🚗 Gestione Viaggi</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="modulo_viaggio.html">Nuovo Viaggio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="lista_viaggi.html">Lista Viaggi</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="costi.html">Costi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="statistiche.html">Statistiche</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-cost">
+        <h1 class="section-title">💶 Calcolo Costi Viaggi</h1>
+        <div class="row mb-4" id="passenger-cards"></div>
+        <div class="table-container" id="cost-table"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_URL = 'http://localhost:8080/api/viaggi';
+        const PREZZO_BENZINA = 1.85;
+        const CONSUMO_URBANO = 13;
+        const CONSUMO_EXTRA = 17.5;
+
+        async function caricaCosti() {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error('Errore caricamento dati');
+                const viaggi = await response.json();
+                viaggi.sort(sortByDataOra);
+
+                const content = document.getElementById('cost-table');
+                if (!viaggi.length) {
+                    content.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>Nessun viaggio salvato</p></div>';
+                    return;
+                }
+
+                document.getElementById('passenger-cards').innerHTML = creaCartePasseggeri(viaggi);
+                content.innerHTML = creaTabellaCosti(viaggi);
+            } catch (error) {
+                console.error('Errore:', error);
+                document.getElementById('cost-table').innerHTML = '<div class="empty-state"><p>Errore nel caricamento dei costi</p></div>';
+            }
+        }
+
+        function creaCartePasseggeri(viaggi) {
+            const totals = {
+                Daniele: 0,
+                Anita: 0,
+                Nicole: 0
+            };
+
+            viaggi.forEach(viaggio => {
+                const kmTotali = viaggio.kmFinali ? parseFloat(viaggio.kmFinali) - parseFloat(viaggio.kmIniziali) : null;
+                if (kmTotali === null) return;
+
+                const consumo = viaggio.tipoPercorso === 'urbano' ? CONSUMO_URBANO : CONSUMO_EXTRA;
+                const costo = (kmTotali / consumo) * PREZZO_BENZINA;
+                const partecipanti = (viaggio.passeggeri || []).length + 1;
+                const quota = costo / partecipanti;
+
+                (viaggio.passeggeri || []).forEach(nome => {
+                    if (totals[nome] !== undefined) {
+                        totals[nome] += quota;
+                    }
+                });
+            });
+
+            return Object.entries(totals).map(([nome, totale]) => `
+                <div class="col-12 col-md-4 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">${nome}</h5>
+                            <p class="card-text">Debito attuale</p>
+                            <p class="display-6 text-primary">${totale.toFixed(2)} €</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function creaTabellaCosti(viaggi) {
+            let html = `
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Da</th>
+                            <th>A</th>
+                            <th>Tipo Percorso</th>
+                            <th>Passeggeri</th>
+                            <th>Km Totali</th>
+                            <th>Consumo</th>
+                            <th>Costo (€)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            viaggi.forEach(viaggio => {
+                const kmTotali = viaggio.kmFinali ? parseFloat(viaggio.kmFinali) - parseFloat(viaggio.kmIniziali) : null;
+                const consumo = viaggio.tipoPercorso === 'urbano' ? CONSUMO_URBANO : CONSUMO_EXTRA;
+                const kmValue = kmTotali !== null ? kmTotali.toFixed(1) : '—';
+                const litri = kmTotali !== null ? kmTotali / consumo : null;
+                const costo = litri !== null ? (litri * PREZZO_BENZINA).toFixed(2) : '—';
+                const tipoLabel = viaggio.tipoPercorso === 'urbano' ? 'Urbano' : 'Extraurbano';
+                const initials = (viaggio.passeggeri || []).map(nome => nome[0].toUpperCase()).join(', ') || '—';
+
+                html += `
+                    <tr>
+                        <td>${formatData(viaggio.data)}</td>
+                        <td>${viaggio.da}</td>
+                        <td>${viaggio.a}</td>
+                        <td>${tipoLabel}</td>
+                        <td>${initials}</td>
+                        <td>${kmValue}</td>
+                        <td>${litri !== null ? litri.toFixed(2) : '—'}</td>
+                        <td>${costo !== '—' ? costo + ' €' : '—'}</td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+            `;
+            return html;
+        }
+
+        function sortByDataOra(a, b) {
+            const dateA = new Date(`${a.data}T${a.oraPartenza || '00:00'}`);
+            const dateB = new Date(`${b.data}T${b.oraPartenza || '00:00'}`);
+            return dateA - dateB;
+        }
+
+        function formatData(data) {
+            const dataObj = new Date(data);
+            return dataObj.toLocaleDateString('it-IT', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            });
+        }
+
+        window.addEventListener('load', caricaCosti);
+    </script>
+</body>
+</html>
