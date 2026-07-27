@@ -249,7 +249,7 @@
     <nav class="navbar navbar-expand-lg navbar-light navbar-custom no-print">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.html" style="display: inline-flex; align-items: center; gap: 8px;">
-                <img src="icona.png" alt="Icona Gestione Viaggi" style="height: 24px; width: auto;">
+                
                 <span>🚗 Gestione Viaggi</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -365,7 +365,7 @@
     <script>
         const AUTH_KEY = 'gestioneviaggi.auth';
         function isAuthenticated() {
-            return localStorage.getItem(AUTH_KEY) === 'authenticated';
+            return sessionStorage.getItem(AUTH_KEY) === 'authenticated';
         }
 
         if (!isAuthenticated()) {

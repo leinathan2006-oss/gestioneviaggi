@@ -34,7 +34,7 @@
     <nav class="navbar navbar-expand-lg navbar-light navbar-custom" style="background: rgba(255, 255, 255, 0.95); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.html" style="color: #667eea; font-weight: bold; font-size: 1.3rem; display: inline-flex; align-items: center; gap: 8px;">
-                <img src="icona.png" alt="Icona Gestione Viaggi" style="height: 24px; width: auto;">
+                
                 <span>🚗 Gestione Viaggi</span>
             </a>
         </div>
@@ -70,11 +70,11 @@
         }
 
         function setAuthSession() {
-            localStorage.setItem(AUTH_KEY, 'authenticated');
+            sessionStorage.setItem(AUTH_KEY, 'authenticated');
         }
 
         function isAuthenticated() {
-            return localStorage.getItem(AUTH_KEY) === 'authenticated';
+            return sessionStorage.getItem(AUTH_KEY) === 'authenticated';
         }
 
         document.getElementById('password').addEventListener('keydown', (event) => {

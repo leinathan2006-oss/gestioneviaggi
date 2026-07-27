@@ -111,7 +111,7 @@
     <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.html" style="display: inline-flex; align-items: center; gap: 8px;">
-                <img src="icona.png" alt="Icona Gestione Viaggi" style="height: 24px; width: auto;">
+                
                 <span>🚗 Gestione Viaggi</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -119,7 +119,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    
                     <li class="nav-item"><a class="nav-link" href="modulo_viaggio.html">Nuovo Viaggio</a></li>
                     <li class="nav-item"><a class="nav-link" href="lista_viaggi.html">Lista Viaggi</a></li>
                     <li class="nav-item"><a class="nav-link active" href="costi.html">Costi</a></li>
@@ -139,7 +139,7 @@
     <script>
         const AUTH_KEY = 'gestioneviaggi.auth';
         function isAuthenticated() {
-            return localStorage.getItem(AUTH_KEY) === 'authenticated';
+            return sessionStorage.getItem(AUTH_KEY) === 'authenticated';
         }
 
         if (!isAuthenticated()) {
