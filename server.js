@@ -21,7 +21,7 @@ function ordinaViaggi(viaggi) {
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static("public"));
+app.use(express.static(__dirname));
 
 // GET - Leggi tutti i viaggi
 app.get('/api/viaggi', (req, res) => {
