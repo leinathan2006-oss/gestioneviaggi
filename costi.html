@@ -128,6 +128,7 @@
     <div class="container-cost">
         <h1 class="section-title">💶 Calcolo Costi Viaggi</h1>
         <div class="row mb-4" id="passenger-cards"></div>
+        <div class="row mb-4" id="personal-costs"></div>
         <div class="table-container" id="cost-table"></div>
     </div>
 
@@ -147,11 +148,14 @@
 
                 const content = document.getElementById('cost-table');
                 if (!viaggi.length) {
+                    document.getElementById('passenger-cards').innerHTML = '';
+                    document.getElementById('personal-costs').innerHTML = '';
                     content.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>Nessun viaggio salvato</p></div>';
                     return;
                 }
 
                 document.getElementById('passenger-cards').innerHTML = creaCartePasseggeri(viaggi);
+                document.getElementById('personal-costs').innerHTML = creaCarteCostiPersonali(viaggi);
                 content.innerHTML = creaTabellaCosti(viaggi);
             } catch (error) {
                 console.error('Errore:', error);
@@ -193,6 +197,76 @@
                     </div>
                 </div>
             `).join('');
+        }
+
+        function creaCarteCostiPersonali(viaggi) {
+            const persone = ['Daniele', 'Anita', 'Nicole'];
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth();
+            const previousMonthIndex = (currentMonth + 11) % 12;
+            const previousYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+
+            const totals = Object.fromEntries(
+                persone.map(nome => [nome, { corrente: 0, precedente: 0 }])
+            );
+
+            viaggi.forEach(viaggio => {
+                const kmTotali = viaggio.kmFinali ? parseFloat(viaggio.kmFinali) - parseFloat(viaggio.kmIniziali) : null;
+                if (kmTotali === null) return;
+
+                const consumo = viaggio.tipoPercorso === 'urbano' ? CONSUMO_URBANO : CONSUMO_EXTRA;
+                const costo = (kmTotali / consumo) * PREZZO_BENZINA;
+                const partecipanti = (viaggio.passeggeri || []).length + 1;
+                const quota = costo / partecipanti;
+
+                const dataViaggio = new Date(viaggio.data);
+                const isCurrentMonth = dataViaggio.getFullYear() === currentYear && dataViaggio.getMonth() === currentMonth;
+                const isPreviousMonth = dataViaggio.getFullYear() === previousYear && dataViaggio.getMonth() === previousMonthIndex;
+
+                (viaggio.passeggeri || []).forEach(nome => {
+                    if (totals[nome] !== undefined) {
+                        if (isCurrentMonth) totals[nome].corrente += quota;
+                        if (isPreviousMonth) totals[nome].precedente += quota;
+                    }
+                });
+            });
+
+            return `
+                <div class="col-12">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body">
+                            <h4 class="card-title mb-3">💼 Costi personali</h4>
+                            <div class="row g-3">
+                                ${persone.map(nome => `
+                                    <div class="col-12 col-md-4">
+                                        <div class="card h-100 border-light-subtle">
+                                            <div class="card-body">
+                                                <h5 class="card-title">${nome}</h5>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <small class="text-muted">${formatMonthLabel(currentYear, currentMonth)}</small>
+                                                        <div class="fw-bold text-primary">${totals[nome].corrente.toFixed(2)} €</div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <small class="text-muted">${formatMonthLabel(previousYear, previousMonthIndex)}</small>
+                                                        <div class="fw-bold text-secondary">${totals[nome].precedente.toFixed(2)} €</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function formatMonthLabel(year, monthIndex) {
+            const mesi = ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'];
+            return `${mesi[monthIndex]} ${year}`;
         }
 
         function creaTabellaCosti(viaggi) {
