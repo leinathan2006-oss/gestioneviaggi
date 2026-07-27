@@ -256,7 +256,8 @@
         const kmTotaliDisplay = document.getElementById('km-totali');
         const form = document.getElementById('modulo-viaggio');
         const risultatiSection = document.getElementById('risultati-section');
-        const API_URL = 'fetch("/api/viaggi")';
+        const API_URL = '/api/viaggi';
+
 
         function sortByDataOra(a, b) {
             const dateA = new Date(`${a.data}T${a.oraPartenza || '00:00'}`);
