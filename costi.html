@@ -226,6 +226,12 @@
             { key: 'consumo', label: 'Consumo' },
             { key: 'costo', label: 'Costo (€)' }
         ];
+        const PERSONE_COSTI = [
+            { key: 'Autista', label: 'Tu (Autista)' },
+            { key: 'Daniele', label: 'Daniele' },
+            { key: 'Anita', label: 'Anita' },
+            { key: 'Nicole', label: 'Nicole' }
+        ];
         let viaggiAttuali = [];
 
         function renderExportColumns() {
@@ -309,7 +315,11 @@
                 return;
             }
             const preview = document.getElementById('export-preview');
-            preview.innerHTML = `<h4 class="mb-3">Esportazione costi - PDF</h4>${creaTabellaEsportazione(viaggiAttuali, columns)}`;
+            preview.innerHTML = `
+                <h4 class="mb-3">Esportazione costi - PDF</h4>
+                <div class="mb-4">${creaTabellaEsportazione(viaggiAttuali, columns)}</div>
+                <div>${creaTabellaDettaglioPersone(viaggiAttuali)}</div>
+            `;
             preview.style.display = 'block';
             window.print();
         }
@@ -320,10 +330,11 @@
                 alert('Seleziona almeno una colonna da esportare.');
                 return;
             }
+            const dettagliPersone = calcolaCostiPersone(viaggiAttuali);
             const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<costi>\n${viaggiAttuali.map(viaggio => {
                 const row = columns.map(col => `<${col.key}>${escapeXml(getValoreViaggio(viaggio, col.key))}</${col.key}>`).join('');
                 return `  <viaggio>${row}</viaggio>`;
-            }).join('\n')}\n</costi>`;
+            }).join('\n')}\n  <persone>${dettagliPersone.map(persona => `\n    <persona>\n      <nome>${escapeXml(persona.label)}</nome>\n      <totale>${escapeXml(persona.totale.toFixed(2))}</totale>\n      <corrente>${escapeXml(persona.corrente.toFixed(2))}</corrente>\n      <precedente>${escapeXml(persona.precedente.toFixed(2))}</precedente>\n    </persona>`).join('')}\n  </persone>\n</costi>`;
             const blob = new Blob([xml], { type: 'application/xml;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
@@ -359,13 +370,7 @@
             }
         }
 
-        function creaCartePersone(viaggi) {
-            const persone = [
-                { key: 'Autista', label: 'Tu (Autista)' },
-                { key: 'Daniele', label: 'Daniele' },
-                { key: 'Anita', label: 'Anita' },
-                { key: 'Nicole', label: 'Nicole' }
-            ];
+        function calcolaCostiPersone(viaggi) {
             const now = new Date();
             const currentYear = now.getFullYear();
             const currentMonth = now.getMonth();
@@ -373,7 +378,7 @@
             const previousYear = currentMonth === 0 ? currentYear - 1 : currentYear;
 
             const totals = Object.fromEntries(
-                persone.map(persona => [persona.key, { totale: 0, corrente: 0, precedente: 0 }])
+                PERSONE_COSTI.map(persona => [persona.key, { totale: 0, corrente: 0, precedente: 0 }])
             );
 
             viaggi.forEach(viaggio => {
@@ -389,7 +394,7 @@
                 const isCurrentMonth = dataViaggio.getFullYear() === currentYear && dataViaggio.getMonth() === currentMonth;
                 const isPreviousMonth = dataViaggio.getFullYear() === previousYear && dataViaggio.getMonth() === previousMonthIndex;
 
-                persone.forEach(persona => {
+                PERSONE_COSTI.forEach(persona => {
                     const target = totals[persona.key];
                     if (persona.key === 'Autista') {
                         target.totale += quota;
@@ -406,27 +411,76 @@
                 });
             });
 
-            return persone.map(persona => `
+            return PERSONE_COSTI.map(persona => ({
+                ...persona,
+                totale: totals[persona.key].totale,
+                corrente: totals[persona.key].corrente,
+                precedente: totals[persona.key].precedente
+            }));
+        }
+
+        function creaCartePersone(viaggi) {
+            const datiPersone = calcolaCostiPersone(viaggi);
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth();
+            const previousMonthIndex = (currentMonth + 11) % 12;
+            const previousYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+
+            return datiPersone.map(persona => `
                 <div class="col-12 col-md-6 col-xl-3 mb-3">
                     <div class="card shadow-sm h-100">
                         <div class="card-body">
                             <h5 class="card-title">${persona.label}</h5>
                             <p class="card-text mb-2">Debito attuale</p>
-                            <p class="display-6 text-primary mb-3">${totals[persona.key].totale.toFixed(2)} €</p>
+                            <p class="display-6 text-primary mb-3">${persona.totale.toFixed(2)} €</p>
                             <div class="row">
                                 <div class="col-6">
                                     <small class="text-muted">${formatMonthLabel(currentYear, currentMonth)}</small>
-                                    <div class="fw-bold text-success">${totals[persona.key].corrente.toFixed(2)} €</div>
+                                    <div class="fw-bold text-success">${persona.corrente.toFixed(2)} €</div>
                                 </div>
                                 <div class="col-6">
                                     <small class="text-muted">${formatMonthLabel(previousYear, previousMonthIndex)}</small>
-                                    <div class="fw-bold text-secondary">${totals[persona.key].precedente.toFixed(2)} €</div>
+                                    <div class="fw-bold text-secondary">${persona.precedente.toFixed(2)} €</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             `).join('');
+        }
+
+        function creaTabellaDettaglioPersone(viaggi) {
+            const datiPersone = calcolaCostiPersone(viaggi);
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth();
+            const previousMonthIndex = (currentMonth + 11) % 12;
+            const previousYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+
+            return `
+                <h5 class="mb-3">Dettaglio costi per persona</h5>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Persona</th>
+                            <th>Totale (€)</th>
+                            <th>${formatMonthLabel(currentYear, currentMonth)} (€)</th>
+                            <th>${formatMonthLabel(previousYear, previousMonthIndex)} (€)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${datiPersone.map(persona => `
+                            <tr>
+                                <td>${persona.label}</td>
+                                <td>${persona.totale.toFixed(2)} €</td>
+                                <td>${persona.corrente.toFixed(2)} €</td>
+                                <td>${persona.precedente.toFixed(2)} €</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
         }
 
         function formatMonthLabel(year, monthIndex) {
