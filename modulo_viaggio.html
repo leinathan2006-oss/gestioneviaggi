@@ -371,7 +371,8 @@
             }
 
             const kmTotali = kmTotaliVal !== null ? kmTotaliVal.toFixed(1) : null;
-            const kmFinali = kmFinaliVal !== null ? kmFinaliVal.toFixed(1) : null;
+            const kmFinaliValue = kmFinaliVal !== null ? kmFinaliVal.toFixed(1) : null;
+
 
             // Crea oggetto viaggio
             const viaggio = {
@@ -379,7 +380,7 @@
                 oraPartenza: oraPartenza,
                 oraFine: oraFine || null,
                 kmIniziali: kmIni,
-                kmFinali: kmFinali,
+                kmFinali: kmFinaliValue,
                 kmTotali: kmTotali,
                 da: da,
                 a: a,
