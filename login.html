@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Accesso</title>
+</head>
+<body>
+  <h2>Inserisci la password per accedere</h2>
+
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="login()">Entra</button>
+
+  <p id="errore" style="color:red;"></p>
+
+  <script>
+    // HASH della password corretta (sostituisci con il tuo)
+    const PASSWORD_HASH = "fc976fb3ac33c80297991f8fb627d599d9de244dc9002faf7f2811ccb31c27e1";
+
+    async function sha256(text) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(text);
+      const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+    }
+
+    async function login() {
+      const pwd = document.getElementById("password").value;
+      const hash = await sha256(pwd);
+
+      if (hash === PASSWORD_HASH) {
+        window.location.href = "index.html";
+      } else {
+        document.getElementById("errore").textContent = "Password errata";
+      }
+    }
+  </script>
+</body>
+</html>

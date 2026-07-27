@@ -54,6 +54,13 @@
     </style>
 </head>
 <body>
+    <script>
+  // Se vuoi impedire l'accesso diretto a index.html
+  if (document.referrer.indexOf("login.html") === -1) {
+    window.location.href = "login.html";
+  }
+    </script>
+
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
