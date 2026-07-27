@@ -1,39 +1,76 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>Accesso</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accesso - Gestione Viaggi</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .login-card {
+            max-width: 420px;
+            margin: 80px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        .login-card h2 {
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
 </head>
+
 <body>
-  <h2>Inserisci la password per accedere</h2>
 
-  <input type="password" id="password" placeholder="Password">
-  <button onclick="login()">Entra</button>
+    <div class="login-card">
+        <h2>🔐 Accesso</h2>
+        <p class="text-center text-muted mb-4">Inserisci la password per accedere</p>
 
-  <p id="errore" style="color:red;"></p>
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" id="password" class="form-control" placeholder="Password">
+        </div>
 
-  <script>
-    // HASH della password corretta (sostituisci con il tuo)
-    const PASSWORD_HASH = "fc976fb3ac33c80297991f8fb627d599d9de244dc9002faf7f2811ccb31c27e1";
+        <button class="btn btn-primary w-100" onclick="login()">Entra</button>
 
-    async function sha256(text) {
-      const encoder = new TextEncoder();
-      const data = encoder.encode(text);
-      const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
-    }
+        <p id="errore" class="text-danger mt-3 text-center"></p>
+    </div>
 
-    async function login() {
-      const pwd = document.getElementById("password").value;
-      const hash = await sha256(pwd);
+    <script>
+        // Inserisci qui il tuo hash SHA-256
+        const PASSWORD_HASH = "INSERISCI_HASH_QUI";
 
-      if (hash === PASSWORD_HASH) {
-        window.location.href = "index.html";
-      } else {
-        document.getElementById("errore").textContent = "Password errata";
-      }
-    }
-  </script>
+        async function sha256(text) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(text);
+            const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+        }
+
+        async function login() {
+            const pwd = document.getElementById("password").value;
+            const hash = await sha256(pwd);
+
+            if (hash === PASSWORD_HASH) {
+                window.location.href = "index.html";
+            } else {
+                document.getElementById("errore").textContent = "Password errata";
+            }
+        }
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
