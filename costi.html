@@ -94,6 +94,38 @@
         .btn-secondary-custom:hover {
             background: #5a6268;
         }
+        .export-toolbar {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+        }
+        .export-columns {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .export-preview {
+            display: none;
+            padding: 20px;
+            background: white;
+            margin-top: 20px;
+        }
+        .export-preview table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .export-preview th,
+        .export-preview td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .export-preview th {
+            background: #f8f9fa;
+        }
         @media (max-width: 768px) {
             .container-cost {
                 padding: 15px;
@@ -131,8 +163,22 @@
 
     <div class="container-cost">
         <h1 class="section-title">💶 Calcolo Costi Viaggi</h1>
+        <div class="export-toolbar">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <div>
+                    <strong>Esporta costi</strong>
+                    <div class="text-muted small">Seleziona le colonne da includere</div>
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-outline-primary btn-sm" onclick="esportaPdf()">📄 PDF</button>
+                    <button class="btn btn-outline-success btn-sm" onclick="esportaXml()">🧾 XML</button>
+                </div>
+            </div>
+            <div class="export-columns" id="export-columns"></div>
+        </div>
         <div class="row mb-4" id="person-cards"></div>
         <div class="table-container" id="cost-table"></div>
+        <div class="export-preview" id="export-preview"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -150,12 +196,131 @@
         const PREZZO_BENZINA = 1.85;
         const CONSUMO_URBANO = 13;
         const CONSUMO_EXTRA = 17.5;
+        const EXPORT_COLUMNS = [
+            { key: 'data', label: 'Data' },
+            { key: 'da', label: 'Da' },
+            { key: 'a', label: 'A' },
+            { key: 'tipoPercorso', label: 'Tipo Percorso' },
+            { key: 'passeggeri', label: 'Passeggeri' },
+            { key: 'kmTotali', label: 'Km Totali' },
+            { key: 'consumo', label: 'Consumo' },
+            { key: 'costo', label: 'Costo (€)' }
+        ];
+        let viaggiAttuali = [];
+
+        function renderExportColumns() {
+            document.getElementById('export-columns').innerHTML = EXPORT_COLUMNS.map(col => `
+                <label class="form-check-label">
+                    <input class="form-check-input me-2" type="checkbox" value="${col.key}" checked>
+                    ${col.label}
+                </label>
+            `).join('');
+        }
+
+        function getSelectedColumns() {
+            const selected = Array.from(document.querySelectorAll('#export-columns input[type="checkbox"]:checked')).map(input => input.value);
+            if (!selected.length) return [];
+            return EXPORT_COLUMNS.filter(col => selected.includes(col.key));
+        }
+
+        function getValoreViaggio(viaggio, key) {
+            switch (key) {
+                case 'data':
+                    return formatData(viaggio.data);
+                case 'da':
+                    return viaggio.da || '—';
+                case 'a':
+                    return viaggio.a || '—';
+                case 'tipoPercorso':
+                    return viaggio.tipoPercorso === 'urbano' ? 'Urbano' : 'Extraurbano';
+                case 'passeggeri':
+                    return (viaggio.passeggeri || []).join(', ') || '—';
+                case 'kmTotali':
+                    return viaggio.kmFinali ? (parseFloat(viaggio.kmFinali) - parseFloat(viaggio.kmIniziali)).toFixed(1) : '—';
+                case 'consumo':
+                    return viaggio.kmFinali ? ((parseFloat(viaggio.kmFinali) - parseFloat(viaggio.kmIniziali)) / (viaggio.tipoPercorso === 'urbano' ? CONSUMO_URBANO : CONSUMO_EXTRA)).toFixed(2) : '—';
+                case 'costo':
+                    return viaggio.kmFinali ? (((parseFloat(viaggio.kmFinali) - parseFloat(viaggio.kmIniziali)) / (viaggio.tipoPercorso === 'urbano' ? CONSUMO_URBANO : CONSUMO_EXTRA)) * PREZZO_BENZINA).toFixed(2) + ' €' : '—';
+                default:
+                    return '—';
+            }
+        }
+
+        function creaTabellaEsportazione(viaggi, columns) {
+            if (!columns.length) return '<p class="text-muted">Seleziona almeno una colonna.</p>';
+            let html = '<table><thead><tr>';
+            columns.forEach(col => {
+                html += `<th>${col.label}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+            viaggi.forEach(viaggio => {
+                html += '<tr>';
+                columns.forEach(col => {
+                    html += `<td>${escapeHtml(getValoreViaggio(viaggio, col.key))}</td>`;
+                });
+                html += '</tr>';
+            });
+            html += '</tbody></table>';
+            return html;
+        }
+
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function escapeXml(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&apos;');
+        }
+
+        function esportaPdf() {
+            const columns = getSelectedColumns();
+            if (!columns.length) {
+                alert('Seleziona almeno una colonna da esportare.');
+                return;
+            }
+            const preview = document.getElementById('export-preview');
+            preview.innerHTML = `<h4 class="mb-3">Esportazione costi - PDF</h4>${creaTabellaEsportazione(viaggiAttuali, columns)}`;
+            preview.style.display = 'block';
+            window.print();
+        }
+
+        function esportaXml() {
+            const columns = getSelectedColumns();
+            if (!columns.length) {
+                alert('Seleziona almeno una colonna da esportare.');
+                return;
+            }
+            const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<costi>\n${viaggiAttuali.map(viaggio => {
+                const row = columns.map(col => `<${col.key}>${escapeXml(getValoreViaggio(viaggio, col.key))}</${col.key}>`).join('');
+                return `  <viaggio>${row}</viaggio>`;
+            }).join('\n')}\n</costi>`;
+            const blob = new Blob([xml], { type: 'application/xml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'costi.xml';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
 
         async function caricaCosti() {
             try {
                 const response = await fetch(API_URL);
                 if (!response.ok) throw new Error('Errore caricamento dati');
                 const viaggi = await response.json();
+                viaggiAttuali = viaggi;
                 viaggi.sort(sortByDataOra);
 
                 const content = document.getElementById('cost-table');
@@ -312,7 +477,10 @@
             });
         }
 
-        window.addEventListener('load', caricaCosti);
+        window.addEventListener('load', () => {
+            renderExportColumns();
+            caricaCosti();
+        });
     </script>
 </body>
 </html>
