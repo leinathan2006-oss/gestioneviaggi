@@ -56,10 +56,14 @@
 </head>
 <body>
     <script>
-  // Se vuoi impedire l'accesso diretto a index.html
-  if (document.referrer.indexOf("login.html") === -1) {
-    window.location.href = "login.html";
-  }
+        const AUTH_KEY = 'gestioneviaggi.auth';
+        function isAuthenticated() {
+            return localStorage.getItem(AUTH_KEY) === 'authenticated';
+        }
+
+        if (!isAuthenticated()) {
+            window.location.href = 'login.html';
+        }
     </script>
 
     <!-- Navbar -->

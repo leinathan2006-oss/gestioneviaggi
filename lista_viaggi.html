@@ -363,6 +363,15 @@
     </div>
 
     <script>
+        const AUTH_KEY = 'gestioneviaggi.auth';
+        function isAuthenticated() {
+            return localStorage.getItem(AUTH_KEY) === 'authenticated';
+        }
+
+        if (!isAuthenticated()) {
+            window.location.href = 'login.html';
+        }
+
         const API_URL = '/api/viaggi';
         const EXPORT_COLUMNS = [
            { key: 'data', label: 'Data' },

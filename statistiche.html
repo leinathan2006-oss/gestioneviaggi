@@ -149,6 +149,15 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        const AUTH_KEY = 'gestioneviaggi.auth';
+        function isAuthenticated() {
+            return localStorage.getItem(AUTH_KEY) === 'authenticated';
+        }
+
+        if (!isAuthenticated()) {
+            window.location.href = 'login.html';
+        }
+
         const API_URL = '/api/viaggi';
         const PREZZO_BENZINA = 1.85;
         const CONSUMO_URBANO = 13;
