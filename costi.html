@@ -126,6 +126,26 @@
         .export-preview th {
             background: #f8f9fa;
         }
+        @media print {
+            body {
+                background: white !important;
+                padding: 0;
+            }
+            .navbar-custom,
+            .export-toolbar,
+            .container-cost > .row,
+            .table-container {
+                display: none !important;
+            }
+            .export-preview {
+                display: block !important;
+                padding: 0;
+            }
+            @page {
+                size: landscape;
+                margin: 10mm;
+            }
+        }
         @media (max-width: 768px) {
             .container-cost {
                 padding: 15px;
