@@ -391,13 +391,14 @@
 
             try {
                 // Salva i dati tramite API
-                const response = await fetch('fetch("/api/viaggi")', {
+                const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(viaggio)
                 });
+                
 
                 if (!response.ok) {
                     throw new Error('Errore nel salvataggio');
