@@ -15,7 +15,7 @@ function ordinaViaggi(viaggi) {
     return viaggi.sort((a, b) => {
         const dateA = new Date(`${a.data}T${a.oraPartenza || '00:00'}`);
         const dateB = new Date(`${b.data}T${b.oraPartenza || '00:00'}`);
-        return dateA - dateB;
+        return dateB - dateA;
     });
 }
 
