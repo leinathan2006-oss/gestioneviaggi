@@ -4,7 +4,7 @@ const path = require('path');
 const cors = require('cors');
 
 const app = express();
-const PORT = 8080;
+const PORT = process.env.PORT || 3000;
 const DATI_FILE = path.join(__dirname, 'dati_viaggi.json');
 
 function leggiJSON(filePath) {
@@ -21,7 +21,7 @@ function ordinaViaggi(viaggi) {
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname));
+app.use(express.static("public"));
 
 // GET - Leggi tutti i viaggi
 app.get('/api/viaggi', (req, res) => {
@@ -153,6 +153,6 @@ app.delete('/api/viaggi', (req, res) => {
     }
 });
 
-app.listen(PORT, 'localhost', () => {
-    console.log(`Server avviato su http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+    console.log("server avvoato sulla porta " + PORT);
 });
