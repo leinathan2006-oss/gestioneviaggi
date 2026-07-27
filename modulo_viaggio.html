@@ -256,7 +256,7 @@
         const kmTotaliDisplay = document.getElementById('km-totali');
         const form = document.getElementById('modulo-viaggio');
         const risultatiSection = document.getElementById('risultati-section');
-        const API_URL = 'http://localhost:8080/api/viaggi';
+        const API_URL = 'fetch("/api/viaggi")';
 
         function sortByDataOra(a, b) {
             const dateA = new Date(`${a.data}T${a.oraPartenza || '00:00'}`);
@@ -390,7 +390,7 @@
 
             try {
                 // Salva i dati tramite API
-                const response = await fetch('http://localhost:8080/api/viaggi', {
+                const response = await fetch('fetch("/api/viaggi")', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
